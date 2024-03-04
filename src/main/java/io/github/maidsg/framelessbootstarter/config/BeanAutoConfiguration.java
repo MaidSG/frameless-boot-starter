@@ -1,5 +1,6 @@
 package io.github.maidsg.framelessbootstarter.config;
 
+import io.github.maidsg.framelessbootstarter.controlleradvice.GlobalExceptionAdvice;
 import io.github.maidsg.framelessbootstarter.controlleradvice.ResultAdvice;
 import io.github.maidsg.framelessbootstarter.model.settings.BootStarterProperties;
 import org.dromara.hutool.extra.spring.EnableSpringUtil;
@@ -23,6 +24,9 @@ public class BeanAutoConfiguration {
     public ResultAdvice resultHandler() {
         return new ResultAdvice();
     }
+
+    @Bean
+    public GlobalExceptionAdvice exceptionHandler(){return new GlobalExceptionAdvice();}
 
     @Bean
     public BootStarterProperties bootStarterProperties(){

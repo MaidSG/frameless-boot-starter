@@ -27,7 +27,7 @@ public enum ResponseEnum implements BaseCode {
     METHOD_NOT_ALLOWED("405", "method_not_allowed"),
     REQUEST_TIMEOUT("408", "request_timeout"),
 
-    INVALID_ARGUMENT("A0000", "invalid_argument"),
+    INVALID_ARGUMENT("A0000", "invalid_argument : {}"),
     ARGUMENT_ANALYZE("A0001", "argument_analyze"),
 
     BUSINESS_EXCEPTION("B0000", "business_exception"),
@@ -35,22 +35,22 @@ public enum ResponseEnum implements BaseCode {
 
     ;
 
-    ResponseEnum(String value, String message) {
-        this.value = value;
+    ResponseEnum(String code, String message) {
+        this.code = code;
         this.message = message;
     }
 
-    private final String value;
+    private final String code;
 
     private final String message;
 
     @Override
     public String getCode() {
-        return null;
+        return code;
     }
 
     @Override
     public String getMessage() {
-        return null;
+        return message;
     }
 }
