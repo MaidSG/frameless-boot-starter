@@ -22,7 +22,6 @@ public class BootStarterProperties {
 
     private boolean enabled = Boolean.FALSE;
 
-
     private String success = "success";
 
     private String code = "code";
@@ -34,6 +33,26 @@ public class BootStarterProperties {
     private String timestamp = "timestamp";
 
     private String data = "data";
+
+
+    @Configuration
+    @ConfigurationProperties(prefix = "frameless.logback")
+    public class LogBackProperties{
+        // 日志路径
+        private String logPath ;
+        // 日志级别
+        private String globalLevel;
+        // 日志数据源
+        private String fileDataSource;
+        // 最大保存天数
+        private String maxMaintainDays;
+        // 单个文件大小
+        private String maxFileSize;
+
+        // 总文件大小超过多少时压缩
+        private String totalSizeCap;
+
+    }
 
 
 }
