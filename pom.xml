@@ -53,6 +53,15 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
+        <!--tomcat-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <!-- jar包转war包需要-->
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
         <!--参数校验-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -16,7 +16,6 @@ import lombok.Data;
  * @Modify：
  */
 @Data
-@Builder
 public class LogInfo {
 
     /**
@@ -43,6 +42,27 @@ public class LogInfo {
      * 异常详细
      */
     private String exceptionDetail;
+
+    /**
+     * 请求接口地址
+     */
+    private String path;
+
+    /**
+     * 描述
+     */
+    private String description;
+
+    /**
+     * 日志类型 INFO ERROR
+     */
+    private String platformType;
+
+    /**
+     * 方法名
+     */
+    private String method;
+
 
     /**
      *  日志切面构造方法

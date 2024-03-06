@@ -1,5 +1,6 @@
 package io.github.maidsg.framelessbootstarter.config;
 
+import io.github.maidsg.framelessbootstarter.aop.TraceLogAspect;
 import io.github.maidsg.framelessbootstarter.controlleradvice.GlobalExceptionAdvice;
 import io.github.maidsg.framelessbootstarter.controlleradvice.ResultAdvice;
 import io.github.maidsg.framelessbootstarter.model.settings.BootStarterProperties;
@@ -32,6 +33,16 @@ public class BeanAutoConfiguration {
     public BootStarterProperties bootStarterProperties(){
         return new BootStarterProperties();
     }
+
+    @Bean
+    public TraceLogAspect traceLogAspect(){return new TraceLogAspect();}
+
+    @Bean
+    public BootStarterProperties.LogBackProperties logBackProperties(BootStarterProperties bootStarterProperties){
+        return bootStarterProperties.new LogBackProperties();
+    }
+
+
 
 
 

@@ -1,5 +1,6 @@
 package io.github.maidsg.framelessbootstarter.model.settings;
 
+import io.github.maidsg.framelessbootstarter.constant.StarterConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -37,13 +38,14 @@ public class BootStarterProperties {
 
     @Configuration
     @ConfigurationProperties(prefix = "frameless.logback")
+    @Data
     public class LogBackProperties{
         // 日志路径
         private String logPath ;
         // 日志级别
         private String globalLevel;
         // 日志数据源
-        private String fileDataSource;
+        private String fileDataSource = StarterConstant.FILE_SOURCE_PATH;
         // 最大保存天数
         private String maxMaintainDays;
         // 单个文件大小

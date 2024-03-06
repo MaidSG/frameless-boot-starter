@@ -12,4 +12,9 @@ package io.github.maidsg.framelessbootstarter.constant;
  * @Modify：
  */
 public class StarterConstant {
+
+    // file source path
+    public static final String FILE_SOURCE_PATH = "io.github.maidsg.framelessbootstarter.dao.LogFileDataSource";
+
+
 }
