@@ -4,9 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.maidsg</groupId>
     <artifactId>frameless-boot-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>frameless-boot-starter</name>
     <description>frameless-boot-starter</description>
+
     <packaging>jar</packaging>
 
     <properties>
@@ -17,6 +18,8 @@
         <hutool.version>6.0.0-M4</hutool.version>
         <fastjson.version>2.0.47</fastjson.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
+        <redisson.version>3.16.1</redisson.version>
+        <guava.version>32.0.1-jre</guava.version>
     </properties>
 
     <licenses>
@@ -36,10 +39,6 @@
 
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -81,22 +80,13 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.dromara.hutool/hutool-all -->
-        <dependency>
-            <groupId>org.dromara.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>${hutool.version}</version>
-        </dependency>
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
-            <version>${fastjson.version}</version>
-        </dependency>
 
         <!--        配置类生成元数据信息-->
         <dependency>
@@ -114,16 +104,43 @@
 
         <!--谷歌核心个工具包-->
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>32.0.1-jre</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.google.guava</groupId>-->
+<!--            <artifactId>guava</artifactId>-->
+<!--            <version>32.0.1-jre</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
+
+        <!--redisson 模块-->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>${redisson.version}</version>
+        </dependency>
+
+        <!-- guava工具类 -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.dromara.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
 
 
     </dependencies>
@@ -136,6 +153,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -156,7 +174,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>io.github.maidsg.framelessbootstarter.FramelessBootStarterApplication</mainClass>
+                    <mainClass>io.github.maidsg.starter.start.FramelessBootStarterApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>
