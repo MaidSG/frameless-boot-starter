@@ -1,4 +1,4 @@
-package io.github.maidsg.starter.start.aop;
+package io.github.maidsg.starter.start.aspect;
 
 import io.github.maidsg.starter.start.annotation.Traceable;
 import io.github.maidsg.starter.start.dao.LogFileDataSource;
@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 /*******************************************************************
  * <pre></pre>
  * @文件名称： TraceLogAspect.java
- * @包 路  径： io.github.maidsg.framelessbootstarter.aop
+ * @包 路  径： io.github.maidsg.framelessbootstarter.aspect
  * @Copyright：wy (C) 2024 *
  * @Description:
  * @Version: V1.0

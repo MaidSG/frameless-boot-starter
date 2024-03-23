@@ -30,6 +30,7 @@ import org.springframework.context.annotation.Configuration;
 public class RedissonConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean(RedissonClient.class)
     @ConditionalOnProperty(prefix = "frameless.redisson", value = "enabled", havingValue = "true")
     public RedissonClient redissonClient(BootStarterProperties.RedissonProperties redissonProperties) {
         RedissonManager redissonManager = new RedissonManager(redissonProperties);

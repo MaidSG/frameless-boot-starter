@@ -1,6 +1,6 @@
 package io.github.maidsg.starter.start.config;
 
-import io.github.maidsg.starter.start.aop.TraceLogAspect;
+import io.github.maidsg.starter.start.aspect.TraceLogAspect;
 import io.github.maidsg.starter.start.controlleradvice.GlobalExceptionAdvice;
 import io.github.maidsg.starter.start.controlleradvice.ResultAdvice;
 import io.github.maidsg.starter.start.model.settings.BootStarterProperties;

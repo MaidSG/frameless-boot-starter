@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "frameless")
+@ConfigurationProperties(prefix = "frameless.api")
 public class BootStarterProperties {
 
     private boolean enabled = Boolean.FALSE;
@@ -63,7 +63,7 @@ public class BootStarterProperties {
     public class RedissonProperties{
 
         private String address;
-        private RedissonConnectionTypeEnum type;
+        private RedissonConnectionTypeEnum type = RedissonConnectionTypeEnum.SINGLE;
         private String password;
         private int database;
         private Boolean enabled = false;

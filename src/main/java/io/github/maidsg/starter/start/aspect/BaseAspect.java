@@ -1,4 +1,4 @@
-package io.github.maidsg.starter.start.aop;
+package io.github.maidsg.starter.start.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 /*******************************************************************
  * <pre></pre>
  * @文件名称： BaseAspect.java
- * @包 路  径： io.github.maidsg.framelessbootstarter.aop
+ * @包 路  径： io.github.maidsg.framelessbootstarter.aspect
  * @Copyright：wy (C) 2024 *
  * @Description:
  * @Version: V1.0
@@ -58,7 +58,7 @@ public class BaseAspect {
         //获取被拦截方法参数名列表
         LocalVariableTableParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
         String[] paramNameArr = discoverer.getParameterNames(method);
-        //SPEL解析
+        //SpEL解析
         ExpressionParser parser = new SpelExpressionParser();
         StandardEvaluationContext context = new StandardEvaluationContext();
         for (int i = 0; i < paramNameArr.length; i++) {

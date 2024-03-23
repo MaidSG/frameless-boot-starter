@@ -22,7 +22,7 @@ public enum RedissonConnectionTypeEnum {
     /**
      * 单机部署方式(默认)
      */
-    STANDALONE("standalone", "单机"),
+    SINGLE("standalone", "单机"),
 
     /**
      * 哨兵

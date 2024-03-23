@@ -14,7 +14,7 @@ package io.github.maidsg.starter.start.constant;
 public class StarterConstant {
 
     // file source path
-    public static final String FILE_SOURCE_PATH = "dao.io.github.maidsg.starter.start.LogFileDataSource";
+    public static final String FILE_SOURCE_PATH = "io.github.maidsg.starter.start.dao.LogFileDataSource";
 
 
 }

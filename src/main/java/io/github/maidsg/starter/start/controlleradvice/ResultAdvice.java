@@ -89,7 +89,7 @@ public class ResultAdvice  implements ResponseBodyAdvice<Object> {
         Boolean flag = !returnType.hasMethodAnnotation(DisableRestfulApi.class);
         if (!flag) return flag;
 
-       return Boolean.TRUE;
+       return Boolean.TRUE && apiProperties.isEnabled();
     }
 
 
