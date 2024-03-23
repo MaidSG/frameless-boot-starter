@@ -18,4 +18,9 @@ public class RedissonConstant {
      */
     public static final String REDIS_CONNECTION_PREFIX = "redis://";
 
+    /**
+     * 锁的key前缀
+     */
+    public static final String LOCK_KEY_PREFIX = "lock:";
+
 }

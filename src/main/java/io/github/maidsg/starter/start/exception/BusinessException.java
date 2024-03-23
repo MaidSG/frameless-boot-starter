@@ -3,6 +3,7 @@ package io.github.maidsg.starter.start.exception;
 import io.github.maidsg.starter.start.enums.ResponseEnum;
 import io.github.maidsg.starter.start.interfaces.BaseCode;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /*******************************************************************
  * <pre></pre>
@@ -15,6 +16,7 @@ import lombok.Data;
  * @Date：2024/3/4 11:26
  * @Modify：
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class BusinessException extends RuntimeException {
 

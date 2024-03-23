@@ -67,10 +67,10 @@ public class Res<T> extends AbstractSerialObject {
     /**
      * 构建返回结果 自定义响应码信息
      *
-     * @param success
-     * @param msg
-     * @param code
-     * @param result
+     * @param success 是否成功
+     * @param msg 信息
+     * @param code 响应码
+     * @param result 结果
      * @return
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -80,7 +80,6 @@ public class Res<T> extends AbstractSerialObject {
 
     /**
      * 构建成功结果
-     *
      * @return
      */
     public static <T> Res<T> ok() {
@@ -92,8 +91,8 @@ public class Res<T> extends AbstractSerialObject {
     /**
      * 构建成功结果
      *
-     * @param result
-     * @return
+     * @param result 结果
+     * @return Res
      */
     public static <T> Res<T> successWith(T result) {
         return build(Boolean.TRUE, SUCCESS_CODE, MSG, result);
@@ -103,10 +102,10 @@ public class Res<T> extends AbstractSerialObject {
     /**
      * 构建成功结果
      *
-     * @param msg
-     * @param result
-     * @param <T>
-     * @return
+     * @param msg 信息
+     * @param result 结果
+     * @param <T> 结果类型
+     * @return Res
      */
     public static <T> Res<T> successWith(String msg, T result) {
         return build(Boolean.TRUE, SUCCESS_CODE, msg, result);
@@ -115,10 +114,10 @@ public class Res<T> extends AbstractSerialObject {
     /**
      * 构建失败结果
      *
-     * @param msg
-     * @param code
-     * @param result
-     * @return
+     * @param msg 信息
+     * @param code 错误码
+     * @param result 结果
+     * @return Res
      */
     public static <T> Res<T> failWith(String code, String msg, T result) {
         return build(Boolean.FALSE, code, msg, result);
@@ -127,9 +126,9 @@ public class Res<T> extends AbstractSerialObject {
     /**
      * 构建失败结果
      *
-     * @param msg
-     * @param code
-     * @return
+     * @param msg 信息
+     * @param code 错误码
+     * @return Res
      */
     public static <T> Res<T> failWith(String code, String msg) {
         return build(Boolean.FALSE, code, msg, null);
