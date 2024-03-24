@@ -22,7 +22,7 @@ public @interface PreventResubmit {
      *
      * @return 超时时间 单位秒
      */
-    int lockTime();
+    int lockTime() default 10;
 
     /**
      * redis 锁key的

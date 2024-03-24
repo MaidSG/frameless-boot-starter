@@ -1,7 +1,7 @@
 package io.github.maidsg.starter.start.strategy.impl;
 
 import io.github.maidsg.starter.start.constant.RedissonConstant;
-import io.github.maidsg.starter.start.model.codc.FastJsonCodec;
+import io.github.maidsg.starter.start.component.serializers.RedissonFastJsonCodec;
 import io.github.maidsg.starter.start.strategy.RedissonConfigStrategy;
 import io.github.maidsg.starter.start.model.settings.BootStarterProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ public class SentinelRedissonConfigStrategyImpl implements RedissonConfigStrateg
             for (int i = 1; i < addrTokens.length; i++) {
                 config.useSentinelServers().addSentinelAddress(RedissonConstant.REDIS_CONNECTION_PREFIX + addrTokens[i]);
             }
-            config.setCodec(new FastJsonCodec());
+            config.setCodec(new RedissonFastJsonCodec());
             log.info("初始化哨兵方式Config,redisAddress:" + address);
         } catch (Exception e) {
             log.error("哨兵Redisson初始化错误", e);

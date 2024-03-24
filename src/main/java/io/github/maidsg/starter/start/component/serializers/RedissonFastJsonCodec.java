@@ -1,4 +1,4 @@
-package io.github.maidsg.starter.start.model.codc;
+package io.github.maidsg.starter.start.component.serializers;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONWriter;
@@ -23,7 +23,7 @@ import java.io.IOException;
  * @Date：2024/3/22 22:07
  * @Modify：
  */
-public class FastJsonCodec extends BaseCodec {
+public class RedissonFastJsonCodec extends BaseCodec {
 
     private final Encoder encoder = in -> {
         ByteBuf out = ByteBufAllocator.DEFAULT.buffer();

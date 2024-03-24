@@ -27,13 +27,15 @@ public class RedissonLockAgent {
     @Autowired
     private RedissonClient redissonClient;
 
+
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 获取锁
      * @param key 锁的key
-     * @return
+     * @return 锁是否存在
      */
     public boolean existKey(String key) {
         return redisTemplate.hasKey(key);
@@ -44,6 +46,15 @@ public class RedissonLockAgent {
      * @param lockName 锁的名称
      */
     public void unlock(String lockName) {
+        if (lockName == null) {
+            return;
+        }
+
+        // 如果不存在key，就直接返回
+        if (!existKey(lockName)) {
+            return;
+        }
+
         try {
             redissonClient.getLock(lockName).unlock();
         } catch (Exception e) {

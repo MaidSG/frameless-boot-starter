@@ -1,7 +1,7 @@
 package io.github.maidsg.starter.start.strategy.impl;
 
 import io.github.maidsg.starter.start.constant.RedissonConstant;
-import io.github.maidsg.starter.start.model.codc.FastJsonCodec;
+import io.github.maidsg.starter.start.component.serializers.RedissonFastJsonCodec;
 import io.github.maidsg.starter.start.strategy.RedissonConfigStrategy;
 import io.github.maidsg.starter.start.model.settings.BootStarterProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class StandaloneRedissonConfigStrategyImpl implements RedissonConfigStrat
             if (StringUtils.isNotBlank(password)) {
                 config.useSingleServer().setPassword(password);
             }
-            config.setCodec(new FastJsonCodec());
+            config.setCodec(new RedissonFastJsonCodec());
             log.info("初始化Redisson单机配置,连接地址:" + address);
         } catch (Exception e) {
             log.error("单机Redisson初始化错误", e);

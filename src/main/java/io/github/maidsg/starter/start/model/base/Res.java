@@ -22,7 +22,7 @@ import org.dromara.hutool.core.date.DateUtil;
 @Data
 @Slf4j
 @NoArgsConstructor
-@JSONType(orders = {"success", "code", "msg", "requestId", "timestamp", "data"})
+@JSONType(orders = {"requestId", "success", "code", "msg", "timestamp", "data"})
 public class Res<T> extends AbstractSerialObject {
 
     public static final String SUCCESS_CODE = "OK";
@@ -68,9 +68,9 @@ public class Res<T> extends AbstractSerialObject {
      * 构建返回结果 自定义响应码信息
      *
      * @param success 是否成功
-     * @param msg 信息
-     * @param code 响应码
-     * @param result 结果
+     * @param msg     信息
+     * @param code    响应码
+     * @param result  结果
      * @return
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -80,12 +80,12 @@ public class Res<T> extends AbstractSerialObject {
 
     /**
      * 构建成功结果
+     *
      * @return
      */
     public static <T> Res<T> ok() {
         return build(Boolean.TRUE, SUCCESS_CODE, MSG, null);
     }
-
 
 
     /**
@@ -102,9 +102,9 @@ public class Res<T> extends AbstractSerialObject {
     /**
      * 构建成功结果
      *
-     * @param msg 信息
+     * @param msg    信息
      * @param result 结果
-     * @param <T> 结果类型
+     * @param <T>    结果类型
      * @return Res
      */
     public static <T> Res<T> successWith(String msg, T result) {
@@ -114,8 +114,8 @@ public class Res<T> extends AbstractSerialObject {
     /**
      * 构建失败结果
      *
-     * @param msg 信息
-     * @param code 错误码
+     * @param msg    信息
+     * @param code   错误码
      * @param result 结果
      * @return Res
      */
@@ -126,7 +126,7 @@ public class Res<T> extends AbstractSerialObject {
     /**
      * 构建失败结果
      *
-     * @param msg 信息
+     * @param msg  信息
      * @param code 错误码
      * @return Res
      */

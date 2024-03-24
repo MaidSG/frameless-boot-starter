@@ -1,4 +1,4 @@
-package io.github.maidsg.starter.start.aspect;
+package io.github.maidsg.starter.start.component.aspect;
 
 import io.github.maidsg.starter.start.annotation.Traceable;
 import io.github.maidsg.starter.start.dao.LogFileDataSource;
