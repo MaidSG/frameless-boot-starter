@@ -55,6 +55,7 @@ public class PreventResubmitAspect extends BaseAspect {
                     throw new BusinessException("请勿重复提交");
                 }
             } finally {
+
                 // 如果锁还存在，在方法执行完成后，释放锁
                 if (isLocked) {
                     redissonLockAgent.unlock(key);

@@ -51,14 +51,15 @@ public class RedissonLockAgent {
         }
 
         // 如果不存在key，就直接返回
-        if (!existKey(lockName)) {
-            return;
-        }
+//        if (!existKey(lockName)) {
+//            return;
+//        }
 
         try {
             redissonClient.getLock(lockName).unlock();
         } catch (Exception e) {
             log.error("解锁异常，lockName=" + lockName, e);
+            throw new RuntimeException("解锁异常，lockName=" + lockName);
         }
     }
 

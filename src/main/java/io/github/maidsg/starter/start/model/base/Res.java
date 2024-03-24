@@ -25,8 +25,8 @@ import org.dromara.hutool.core.date.DateUtil;
 @JSONType(orders = {"requestId", "success", "code", "msg", "timestamp", "data"})
 public class Res<T> extends AbstractSerialObject {
 
-    public static final String SUCCESS_CODE = "OK";
-    public static final String ERROR_CODE = "FAIL";
+    public static final String SUCCESS_CODE = "200";
+    public static final String ERROR_CODE = "400";
     public static final String MSG = "操作成功";
     public static final String ERROR_MSG = "操作失败";
 
