@@ -1,6 +1,6 @@
 package io.github.maidsg.starter.start.strategy.impl;
 
-import io.github.maidsg.starter.start.constant.RedissonConstant;
+import io.github.maidsg.starter.start.constant.RedisConstant;
 import io.github.maidsg.starter.start.component.serializers.RedissonFastJsonCodec;
 import io.github.maidsg.starter.start.strategy.RedissonConfigStrategy;
 import io.github.maidsg.starter.start.model.settings.BootStarterProperties;
@@ -29,7 +29,7 @@ public class StandaloneRedissonConfigStrategyImpl implements RedissonConfigStrat
             String address = redissonProperties.getAddress();
             String password = redissonProperties.getPassword();
             int database = redissonProperties.getDatabase();
-            String redisAddr = RedissonConstant.REDIS_CONNECTION_PREFIX + address;
+            String redisAddr = RedisConstant.REDIS_CONNECTION_PREFIX + address;
             config.useSingleServer().setAddress(redisAddr);
             config.useSingleServer().setDatabase(database);
             if (StringUtils.isNotBlank(password)) {

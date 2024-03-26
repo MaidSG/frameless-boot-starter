@@ -1,5 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-io.github.maidsg.starter.start.config.RedissonConfiguration
+io.github.maidsg.starter.start.config.RedisConfiguration
 
 
 

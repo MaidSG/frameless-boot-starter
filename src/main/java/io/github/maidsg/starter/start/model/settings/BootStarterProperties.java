@@ -70,5 +70,13 @@ public class BootStarterProperties {
 
     }
 
+    @Data
+    @Configuration
+    @ConfigurationProperties(prefix = "frameless.redis")
+    public class StarterRedisProperties{
+        private Boolean enableCache = Boolean.FALSE;
+        private Boolean enableMessage = Boolean.FALSE;
+    }
+
 
 }
