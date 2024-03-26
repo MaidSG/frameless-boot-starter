@@ -23,4 +23,11 @@ public class RedissonConstant {
      */
     public static final String LOCK_KEY_PREFIX = "lock:";
 
+
+    /**
+     * 测试缓存key
+     */
+    public static final String TEST_DEMO_CACHE = "redis_manage:demo";
+
+
 }

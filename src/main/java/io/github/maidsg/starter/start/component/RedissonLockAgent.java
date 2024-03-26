@@ -38,7 +38,7 @@ public class RedissonLockAgent {
      * @return 锁是否存在
      */
     public boolean existKey(String key) {
-        return redisTemplate.hasKey(key);
+        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
     }
 
     /**
@@ -51,9 +51,9 @@ public class RedissonLockAgent {
         }
 
         // 如果不存在key，就直接返回
-//        if (!existKey(lockName)) {
-//            return;
-//        }
+        if (!existKey(lockName)) {
+            return;
+        }
 
         try {
             redissonClient.getLock(lockName).unlock();
@@ -84,9 +84,9 @@ public class RedissonLockAgent {
             }
             return fairLock.tryLock(3, leaseTime, unit);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error("加锁异常，lockKey=" + lockKey, e);
+            throw new RuntimeException("加锁异常，lockKey=" + lockKey);
         }
-        return false;
     }
 
 

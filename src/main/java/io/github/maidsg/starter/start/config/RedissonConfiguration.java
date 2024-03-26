@@ -1,6 +1,8 @@
 package io.github.maidsg.starter.start.config;
 
+import io.github.maidsg.starter.start.component.RedisLockCacheWriter;
 import io.github.maidsg.starter.start.component.serializers.RedisFastJson2Serializer;
+import io.github.maidsg.starter.start.constant.RedissonConstant;
 import io.github.maidsg.starter.start.manager.RedissonManager;
 import io.github.maidsg.starter.start.model.settings.BootStarterProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -11,11 +13,20 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.time.Duration;
+
+import static java.util.Collections.singletonMap;
 
 /*******************************************************************
  * <pre></pre>
@@ -48,6 +59,7 @@ public class RedissonConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "redisTemplate")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        log.info("====初始化RedisTemplate=====");
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
@@ -61,7 +73,29 @@ public class RedissonConfiguration {
         redisTemplate.setHashValueSerializer(fastJson2RedisSerializer);
         // bean的生命周期，属性填充完毕后调用
         redisTemplate.afterPropertiesSet();
+        log.info("====初始化RedisTemplate完成=====");
         return redisTemplate;
     }
+
+
+    @Bean
+    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+        RedisFastJson2Serializer<Object> fastJson2RedisSerializer = new RedisFastJson2Serializer<>(Object.class);
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofHours(3));
+
+        RedisCacheConfiguration redisCacheConfiguration = config.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(fastJson2RedisSerializer));
+
+        RedisCacheWriter writer = new RedisLockCacheWriter(redisConnectionFactory, Duration.ofMillis(50L));
+
+        log.info("====初始化CacheManager完成=====");
+
+        return RedisCacheManager.builder(writer)
+                .cacheDefaults(redisCacheConfiguration)
+                .withInitialCacheConfigurations(singletonMap(RedissonConstant.TEST_DEMO_CACHE, RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)).disableCachingNullValues()))
+                .transactionAware()
+                .build();
+    }
+
 
 }
