@@ -57,22 +57,16 @@ public class BeanAutoConfiguration {
 
 
 
-
     // ==================== redisson ====================
+
+    @Bean
+    public RedissonConfiguration.SelfKeyGenerate selfKeyGenerate(){return new RedissonConfiguration.SelfKeyGenerate();}
 
     @Bean
     public RedissonLockAgent redissonLockAgent(){return new RedissonLockAgent();}
 
     @Bean
     public PreventResubmitAspect preventResubmitAspect(){return new PreventResubmitAspect();}
-
-
-
-
-
-
-
-
 
 
 }
