@@ -1,6 +1,6 @@
 package io.github.maidsg.starter.start.component.aspect;
 
-import io.github.maidsg.starter.start.constant.RedissonConstant;
+import io.github.maidsg.starter.start.constant.RedisConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -87,7 +87,7 @@ public class BaseAspect {
     public List<String> getValueBySpEL(String key, String[] parameterNames, Object[] values, String keyConstant) {
         List<String> keys = new ArrayList<>();
         if (!key.contains("#")) {
-            String s = RedissonConstant.LOCK_KEY_PREFIX + key + keyConstant;
+            String s = RedisConstant.LOCK_KEY_PREFIX + key + keyConstant;
             log.debug("lockKey:" + s);
             keys.add(s);
             return keys;

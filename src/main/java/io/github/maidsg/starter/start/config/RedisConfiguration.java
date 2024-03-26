@@ -2,19 +2,20 @@ package io.github.maidsg.starter.start.config;
 
 import com.alibaba.fastjson2.JSON;
 import io.github.maidsg.starter.start.component.RedisLockCacheWriter;
+import io.github.maidsg.starter.start.component.RedisMessageClient;
 import io.github.maidsg.starter.start.component.serializers.RedisFastJson2Serializer;
-import io.github.maidsg.starter.start.constant.RedissonConstant;
+import io.github.maidsg.starter.start.constant.RedisConstant;
 import io.github.maidsg.starter.start.manager.RedissonManager;
 import io.github.maidsg.starter.start.model.settings.BootStarterProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,9 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
@@ -46,9 +50,10 @@ import static java.util.Collections.singletonMap;
 
 @Slf4j
 @Configuration
+@EnableCaching
 @ConditionalOnClass(BootStarterProperties.RedissonProperties.class)
 @EnableConfigurationProperties({BootStarterProperties.RedissonProperties.class, RedisProperties.class})
-public class RedissonConfiguration {
+public class RedisConfiguration {
 
 
     @Bean
@@ -62,8 +67,8 @@ public class RedissonConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(name = "redisTemplate")
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableCache", havingValue = "true")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        log.info("====初始化RedisTemplate=====");
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
@@ -86,6 +91,7 @@ public class RedissonConfiguration {
      * 使用方法名+参数作为key，不会出现empty key
      */
     @Component("defaultKeyGenerate")
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableCache", havingValue = "true")
     public static class SelfKeyGenerate implements KeyGenerator {
         @Override
         public Object generate(Object target, Method method, Object... params) {
@@ -95,6 +101,7 @@ public class RedissonConfiguration {
 
 
     @Bean
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableCache", havingValue = "true")
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisFastJson2Serializer<Object> fastJson2RedisSerializer = new RedisFastJson2Serializer<>(Object.class);
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofHours(3));
@@ -109,10 +116,35 @@ public class RedissonConfiguration {
 
         return RedisCacheManager.builder(writer)
                 .cacheDefaults(redisCacheConfiguration)
-                .withInitialCacheConfigurations(singletonMap(RedissonConstant.TEST_DEMO_CACHE, RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)).disableCachingNullValues()))
+                .withInitialCacheConfigurations(singletonMap(RedisConstant.TEST_DEMO_CACHE, RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)).disableCachingNullValues()))
                 .transactionAware()
                 .build();
     }
+
+    /**
+     * redis 监听配置
+     *
+     * @param redisConnectionFactory redis 配置
+     * @return
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableMessage", havingValue = "true")
+    public RedisMessageListenerContainer redisContainer(RedisConnectionFactory redisConnectionFactory, RedisMessageClient redisReceiver, MessageListenerAdapter commonListenerAdapter) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(redisConnectionFactory);
+        container.addMessageListener(commonListenerAdapter, new ChannelTopic(RedisConstant.REDIS_TOPIC_NAME));
+        log.info("====初始化RedisMessageListenerContainer完成=====");
+        return container;
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableMessage", havingValue = "true")
+    MessageListenerAdapter commonListenerAdapter(RedisMessageClient redisReceiver) {
+        MessageListenerAdapter messageListenerAdapter = new MessageListenerAdapter(redisReceiver, "onMessage");
+        messageListenerAdapter.setSerializer(new RedisFastJson2Serializer<>(Object.class));
+        return messageListenerAdapter;
+    }
+
 
 
 }

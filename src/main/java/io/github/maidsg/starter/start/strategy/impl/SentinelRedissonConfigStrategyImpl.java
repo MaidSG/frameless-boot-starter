@@ -1,6 +1,6 @@
 package io.github.maidsg.starter.start.strategy.impl;
 
-import io.github.maidsg.starter.start.constant.RedissonConstant;
+import io.github.maidsg.starter.start.constant.RedisConstant;
 import io.github.maidsg.starter.start.component.serializers.RedissonFastJsonCodec;
 import io.github.maidsg.starter.start.strategy.RedissonConfigStrategy;
 import io.github.maidsg.starter.start.model.settings.BootStarterProperties;
@@ -38,7 +38,7 @@ public class SentinelRedissonConfigStrategyImpl implements RedissonConfigStrateg
             }
             // 设置哨兵节点的服务IP和端口
             for (int i = 1; i < addrTokens.length; i++) {
-                config.useSentinelServers().addSentinelAddress(RedissonConstant.REDIS_CONNECTION_PREFIX + addrTokens[i]);
+                config.useSentinelServers().addSentinelAddress(RedisConstant.REDIS_CONNECTION_PREFIX + addrTokens[i]);
             }
             config.setCodec(new RedissonFastJsonCodec());
             log.info("初始化哨兵方式Config,redisAddress:" + address);

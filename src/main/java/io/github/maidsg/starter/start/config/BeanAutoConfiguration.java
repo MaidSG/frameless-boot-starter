@@ -1,5 +1,6 @@
 package io.github.maidsg.starter.start.config;
 
+import io.github.maidsg.starter.start.component.RedisMessageClient;
 import io.github.maidsg.starter.start.component.aspect.PreventResubmitAspect;
 import io.github.maidsg.starter.start.component.aspect.TraceLogAspect;
 import io.github.maidsg.starter.start.component.RedissonLockAgent;
@@ -7,6 +8,7 @@ import io.github.maidsg.starter.start.controlleradvice.GlobalExceptionAdvice;
 import io.github.maidsg.starter.start.controlleradvice.ResultAdvice;
 import io.github.maidsg.starter.start.model.settings.BootStarterProperties;
 import org.dromara.hutool.extra.spring.EnableSpringUtil;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 
 /*******************************************************************
@@ -49,6 +51,16 @@ public class BeanAutoConfiguration {
         return bootStarterProperties.new LogBackProperties();
     }
 
+    @Bean
+    public BootStarterProperties.RedissonProperties redissonProperties(BootStarterProperties bootStarterProperties){
+        return bootStarterProperties.new RedissonProperties();
+    }
+
+    @Bean
+    public BootStarterProperties.StarterRedisProperties starterRedisProperties(BootStarterProperties bootStarterProperties){
+        return bootStarterProperties.new StarterRedisProperties();
+    }
+
 
     // ==================== log ====================
 
@@ -57,16 +69,23 @@ public class BeanAutoConfiguration {
 
 
 
-    // ==================== redisson ====================
+    // ==================== redisson & cache manager & redis ====================
 
     @Bean
-    public RedissonConfiguration.SelfKeyGenerate selfKeyGenerate(){return new RedissonConfiguration.SelfKeyGenerate();}
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableCache", havingValue = "true")
+    public RedisConfiguration.SelfKeyGenerate selfKeyGenerate(){return new RedisConfiguration.SelfKeyGenerate();}
 
     @Bean
+    @ConditionalOnProperty(prefix = "frameless.redisson", value = "enabled", havingValue = "true")
     public RedissonLockAgent redissonLockAgent(){return new RedissonLockAgent();}
 
     @Bean
+    @ConditionalOnProperty(prefix = "frameless.redisson", value = "enabled", havingValue = "true")
     public PreventResubmitAspect preventResubmitAspect(){return new PreventResubmitAspect();}
+
+    @Bean
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableMessage", havingValue = "true")
+    public RedisMessageClient redisMessageClient(){return new RedisMessageClient();}
 
 
 }
