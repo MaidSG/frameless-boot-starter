@@ -64,6 +64,14 @@ public class ResultAdvice  implements ResponseBodyAdvice<Object> {
      */
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        // 如果response状态码不是200,则不进行处理
+        if (body instanceof LinkedHashMap) {
+            LinkedHashMap<String,Object> map = (LinkedHashMap<String, Object>) body;
+            if (map.containsKey("status") && map.get("status") != null && !map.get("status").equals(200)) {
+                return body;
+            }
+        }
+
         if (body instanceof Res) {
             return this.userDefinedResultKey((Res) body);
         } else if (body == null) {
