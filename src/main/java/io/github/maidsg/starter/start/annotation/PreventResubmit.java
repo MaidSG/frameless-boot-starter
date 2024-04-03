@@ -7,7 +7,7 @@ import java.lang.annotation.*;
  * @文件名称： PreventResubmit.java
  * @包 路  径： io.github.maidsg.starter.start.annotation
  * @Copyright：wy (C) 2024 *
- * @Description:
+ * @Description: 使用redisson实现防重复提交
  * @Version: V1.0
  * @Author： wy
  * @Date：2024/3/23 11:13
