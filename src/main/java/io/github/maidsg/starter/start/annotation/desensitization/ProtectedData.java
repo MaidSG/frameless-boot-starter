@@ -1,5 +1,7 @@
 package io.github.maidsg.starter.start.annotation.desensitization;
 
+import io.github.maidsg.starter.start.enums.ProtectedDataTypeEnum;
+
 import java.lang.annotation.*;
 
 /*******************************************************************
@@ -17,4 +19,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ProtectedData {
+
+    /**
+     * 脱敏类型
+     * @return 脱敏类型
+     */
+    ProtectedDataTypeEnum type() default ProtectedDataTypeEnum.ENCODE;
+
 }

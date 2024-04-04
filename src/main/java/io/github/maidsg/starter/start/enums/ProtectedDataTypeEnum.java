@@ -17,7 +17,7 @@ import lombok.Getter;
 public enum ProtectedDataTypeEnum {
 
     /**
-     * 加密
+     * 加密 通用AES加密
      */
     ENCODE,
 
