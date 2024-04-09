@@ -1,5 +1,6 @@
 package io.github.maidsg.starter.start.component.aspect;
 
+import com.google.common.collect.ImmutableList;
 import io.github.maidsg.starter.start.annotation.desensitization.DecodeData;
 import io.github.maidsg.starter.start.annotation.desensitization.EncodeData;
 import io.github.maidsg.starter.start.util.DataDesensitizationUtil;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Objects;
 
 /*******************************************************************
  * <pre></pre>
@@ -45,6 +47,7 @@ public class DataDesensitizationAspect {
         if(result == null){
             return result;
         }
+
         Class resultClass = result.getClass();
         log.debug(" resultClass  = {}" , resultClass);
 
@@ -58,19 +61,20 @@ public class DataDesensitizationAspect {
         Class entity = null;
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
-        EncodeData encode = method.getAnnotation(EncodeData.class);
-        if(encode==null){
-            DecodeData decode = method.getAnnotation(DecodeData.class);
-            if(decode!=null){
-                entity = decode.entity();
-                isEncode = false;
-            }
-        }else{
+
+        if (method.getAnnotation(EncodeData.class) != null) {
+            EncodeData encode = method.getAnnotation(EncodeData.class);
             entity = encode.entity();
+        } else if (method.getAnnotation(DecodeData.class) != null) {
+            DecodeData decode = method.getAnnotation(DecodeData.class);
+            entity = decode.entity();
+            isEncode = false;
         }
 
+
+
         long startTime=System.currentTimeMillis();
-        if(resultClass.equals(entity) || entity.equals(Object.class)){
+        if(resultClass.equals(entity) || Objects.equals(entity, Object.class)){
             // 方法返回实体和注解的entity一样，如果注解没有申明entity属性则认为是(方法返回实体和注解的entity一样)
             DataDesensitizationUtil.handlerObject(result, isEncode);
         } else if(result instanceof List){

@@ -1,6 +1,7 @@
 package io.github.maidsg.starter.start.config;
 
 import io.github.maidsg.starter.start.component.RedisMessageClient;
+import io.github.maidsg.starter.start.component.aspect.DataDesensitizationAspect;
 import io.github.maidsg.starter.start.component.aspect.PreventResubmitAspect;
 import io.github.maidsg.starter.start.component.aspect.TraceLogAspect;
 import io.github.maidsg.starter.start.component.RedissonLockAgent;
@@ -86,6 +87,10 @@ public class BeanAutoConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = "frameless.redis", value = "enableMessage", havingValue = "true")
     public RedisMessageClient redisMessageClient(){return new RedisMessageClient();}
+
+    // ==================== some aop function ====================
+    @Bean
+    public DataDesensitizationAspect dataDesensitizationAspect(){return new DataDesensitizationAspect();}
 
 
 }
