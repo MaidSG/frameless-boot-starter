@@ -41,6 +41,16 @@ public enum ProtectedDataTypeEnum {
      */
     BANK_CARD,
 
+    /**
+     * 地址
+     */
+    ADDRESS,
+
+    /**
+     * 中文名
+     */
+    CHINESE_NAME
+
     ;
 
 

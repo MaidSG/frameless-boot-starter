@@ -4,6 +4,7 @@ import io.github.maidsg.starter.start.annotation.desensitization.ProtectedData;
 import io.github.maidsg.starter.start.enums.ProtectedDataTypeEnum;
 import io.github.maidsg.starter.start.util.encryption.AesEncryptUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.hutool.core.data.MaskingUtil;
 import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.Field;
@@ -110,30 +111,24 @@ public class DataDesensitizationUtil {
                     result = data;
                 }
                 break;
-//            case CHINESE_NAME:
-//                result = chineseName(data);
-//                break;
-//            case ID_CARD:
-//                result = idCardNum(data);
-//                break;
-//            case FIXED_PHONE:
-//                result = fixedPhone(data);
-//                break;
-//            case MOBILE_PHONE:
-//                result = mobilePhone(data);
-//                break;
-//            case ADDRESS:
-//                result = address(data, 3);
-//                break;
-//            case EMAIL:
-//                result = email(data);
-//                break;
-//            case BANK_CARD:
-//                result = bankCard(data);
-//                break;
-//            case CNAPS_CODE:
-//                result = cnapsCode(data);
-//                break;
+            case CHINESE_NAME:
+                result = MaskingUtil.chineseName(data);
+                break;
+            case ID_CARD:
+                result = MaskingUtil.idCardNum(data,3,4);
+                break;
+            case MOBILE_PHONE:
+                result = MaskingUtil.mobilePhone(data);
+                break;
+            case ADDRESS:
+                result = MaskingUtil.address(data, 3);
+                break;
+            case EMAIL:
+                result = MaskingUtil.email(data);
+                break;
+            case BANK_CARD:
+                result = MaskingUtil.bankCard(data);
+                break;
             default:
                 result = data;
         }
