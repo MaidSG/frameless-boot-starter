@@ -58,8 +58,8 @@ public class BeanAutoConfiguration {
     }
 
     @Bean
-    public BootStarterProperties.StarterRedisProperties starterRedisProperties(BootStarterProperties bootStarterProperties){
-        return bootStarterProperties.new StarterRedisProperties();
+    public BootStarterProperties.StarterRedisProperties starterRedisProperties(){
+        return new BootStarterProperties.StarterRedisProperties();
     }
 
 

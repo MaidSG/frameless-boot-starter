@@ -58,11 +58,11 @@ public class BootStarterProperties {
     }
 
     @Data
-    @Configuration
     @ConfigurationProperties(prefix = "frameless.redisson")
     public class RedissonProperties{
 
         private String address;
+        private String port;
         private RedissonConnectionTypeEnum type = RedissonConnectionTypeEnum.SINGLE;
         private String password;
         private int database;
@@ -71,11 +71,12 @@ public class BootStarterProperties {
     }
 
     @Data
-    @Configuration
     @ConfigurationProperties(prefix = "frameless.redis")
-    public class StarterRedisProperties{
+    public static class StarterRedisProperties{
         private Boolean enableCache = Boolean.FALSE;
         private Boolean enableMessage = Boolean.FALSE;
+        // hours
+        private Integer cacheExpireTime = 1;
     }
 
 

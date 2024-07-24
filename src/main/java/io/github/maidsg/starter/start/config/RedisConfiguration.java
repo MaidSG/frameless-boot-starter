@@ -9,6 +9,8 @@ import io.github.maidsg.starter.start.manager.RedissonManager;
 import io.github.maidsg.starter.start.model.settings.BootStarterProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,15 +21,20 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
@@ -52,9 +59,16 @@ import static java.util.Collections.singletonMap;
 @Configuration
 @EnableCaching
 @ConditionalOnClass(BootStarterProperties.RedissonProperties.class)
-@EnableConfigurationProperties({BootStarterProperties.RedissonProperties.class, RedisProperties.class})
+@EnableConfigurationProperties({
+        BootStarterProperties.RedissonProperties.class,
+        BootStarterProperties.StarterRedisProperties.class,
+        RedisProperties.class})
 public class RedisConfiguration {
 
+    @Autowired
+    private BootStarterProperties.RedissonProperties redissonProperties;
+    @Autowired
+    private BootStarterProperties.StarterRedisProperties starterRedisProperties;
 
     @Bean
     @ConditionalOnMissingBean(RedissonClient.class)
@@ -67,7 +81,8 @@ public class RedisConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(name = "redisTemplate")
-    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableCache", havingValue = "true")
+    @DependsOn("starterRedisProperties")
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enable-cache", havingValue = "true")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
@@ -91,7 +106,7 @@ public class RedisConfiguration {
      * 使用方法名+参数作为key，不会出现empty key
      */
     @Component("defaultKeyGenerate")
-    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableCache", havingValue = "true")
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enable-cache", havingValue = "true")
     public static class SelfKeyGenerate implements KeyGenerator {
         @Override
         public Object generate(Object target, Method method, Object... params) {
@@ -101,10 +116,11 @@ public class RedisConfiguration {
 
 
     @Bean
-    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableCache", havingValue = "true")
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enable-cache", havingValue = "true")
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisFastJson2Serializer<Object> fastJson2RedisSerializer = new RedisFastJson2Serializer<>(Object.class);
-        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofHours(3));
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofHours(starterRedisProperties.getCacheExpireTime()));
+
 
         RedisCacheConfiguration redisCacheConfiguration = config
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
@@ -128,7 +144,7 @@ public class RedisConfiguration {
      * @return
      */
     @Bean
-    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableMessage", havingValue = "true")
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enable-message", havingValue = "true")
     public RedisMessageListenerContainer redisContainer(RedisConnectionFactory redisConnectionFactory, RedisMessageClient redisReceiver, MessageListenerAdapter commonListenerAdapter) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory);
@@ -138,11 +154,34 @@ public class RedisConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "frameless.redis", value = "enableMessage", havingValue = "true")
+    @ConditionalOnProperty(prefix = "frameless.redis", value = "enable-message", havingValue = "true")
     MessageListenerAdapter commonListenerAdapter(RedisMessageClient redisReceiver) {
         MessageListenerAdapter messageListenerAdapter = new MessageListenerAdapter(redisReceiver, "onMessage");
         messageListenerAdapter.setSerializer(new RedisFastJson2Serializer<>(Object.class));
         return messageListenerAdapter;
+    }
+
+    @Bean
+    public LettuceConnectionFactory redisConnectionFactory() {
+        // 创建自定义的LettuceClientConfiguration
+        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
+                // 这里可以设置你需要修改的配置参数
+                .build();
+
+        RedisStandaloneConfiguration serverConfig = new RedisStandaloneConfiguration(
+                redissonProperties.getAddress(), Integer.parseInt(redissonProperties.getPort())
+        );
+
+        serverConfig.setDatabase(redissonProperties.getDatabase());
+        serverConfig.setPassword(redissonProperties.getPassword());
+
+        return new LettuceConnectionFactory(serverConfig, clientConfig);
+    }
+
+    @Bean
+    @Qualifier("springSessionDefaultRedisSerializer")
+    public RedisSerializer<Object> setDefaultRedisSerializer() {
+        return new RedisFastJson2Serializer(Object.class);
     }
 
 

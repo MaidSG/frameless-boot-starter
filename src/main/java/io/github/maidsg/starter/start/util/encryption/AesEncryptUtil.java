@@ -17,8 +17,8 @@ public class AesEncryptUtil {
     /**
      * 使用AES-128-CBC加密模式 key和iv可以相同
      */
-    private static String KEY = EncryptedString.key;
-    private static String IV = EncryptedString.iv;
+    private static final String KEY = EncryptedString.key;
+    private static final String IV = EncryptedString.iv;
 
     /**
      * 加密方法
